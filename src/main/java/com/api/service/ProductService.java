@@ -2,15 +2,14 @@ package com.api.service;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api.enums.CountryType;
+import com.api.exceptions.ResourceNotFoundException;
 import com.api.model.Product;
 import com.api.repository.ProductRepository;
-import com.api.strategies.TaxStrategy;
 
 import lombok.Data;
 
@@ -23,8 +22,10 @@ public class ProductService {
 
     private static HashMap<CountryType, TaxStrategy> taxStrategyMap = new HashMap<>();
 
-    public Optional<Product> getProduct(final Long id) {
-        return productRepository.findById(id);
+    public Product getProduct(final Long id) throws ResourceNotFoundException {
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Product not found for id : " + id));
+        return product;
     }
 
     public Product saveProduct(Product product) {
@@ -36,13 +37,10 @@ public class ProductService {
         taxStrategyMap.put(countryType, taxStrategy);
     }
 
-    public BigDecimal getProductPrice(final Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isPresent()) {
-            return taxStrategyMap.get(product.get().getCountry()).calculateTax(product.get().getPrice());
-        } else {
-            return null;
-        }
+    public BigDecimal getProductPrice(final Long id) throws ResourceNotFoundException {
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Product not found for id : " + id));
+        return taxStrategyMap.get(product.getCountry()).calculateTax(product.getPrice());
     }
 
 }

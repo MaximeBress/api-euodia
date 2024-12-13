@@ -1,4 +1,4 @@
-package com.api.strategies;
+package com.api.service;
 
 import java.math.BigDecimal;
 

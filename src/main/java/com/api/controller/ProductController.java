@@ -1,11 +1,11 @@
 package com.api.controller;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.exceptions.ResourceNotFoundException;
 import com.api.model.Product;
 import com.api.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +26,8 @@ public class ProductController {
      * @return A Product object full filled
      */
     @GetMapping("/product/{id}")
-    public Product getProduct(@PathVariable("id") final Long id) {
-        Optional<Product> product = productService.getProduct(id);
-
-        if (product.isPresent()) {
-            return product.get();
-        }
-
-        return null;
+    public Product getProduct(@PathVariable("id") final Long id) throws ResourceNotFoundException {
+        return productService.getProduct(id);
     }
 
     /**
@@ -43,7 +37,7 @@ public class ProductController {
      * @return A product price based on his country
      */
     @GetMapping("/product/{id}/price")
-    public BigDecimal getProductPrice(@PathVariable("id") final Long id) {
+    public BigDecimal getProductPrice(@PathVariable("id") final Long id) throws ResourceNotFoundException {
         return productService.getProductPrice(id);
     }
 

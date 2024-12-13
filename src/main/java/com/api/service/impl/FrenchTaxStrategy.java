@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 
 import com.api.enums.CountryType;
-import com.api.strategies.TaxStrategy;
+import com.api.service.TaxStrategy;
 
 import jakarta.annotation.PostConstruct;
 
