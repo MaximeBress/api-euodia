@@ -29,8 +29,7 @@ public class ProductService {
     }
 
     public Product saveProduct(Product product) {
-        Product savedProduct = productRepository.save(product);
-        return savedProduct;
+        return productRepository.save(product);
     }
 
     public static void addCountryTaxStrategy(CountryType countryType, TaxStrategy taxStrategy) {
